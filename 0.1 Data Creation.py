@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC ### Data Creation Notebook
 # MAGIC
-# MAGIC This notebook generates the data required for the detection, investigation and response notebooks. It saves the generated events to `/tmp/detection_maturity` folder in DBFS.
+# MAGIC This notebook generates the data required for the detection, investigation and response notebooks. It saves the generated events to a desired schema folder in DBFS. The schema path can be edited in the '**0.0 Helper Methods**' notebook file.
 
 # COMMAND ----------
 
@@ -21,35 +21,119 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Delete old demo data
+# Create the schema if it does not exist
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS {schema_path}")
+
+# Get all tabes in the shcema
+tables = spark.sql(f"SHOW TABLES IN {schema_path}").collect()
+
+# Drop each tale dynamically
+for row in tables:
+    table_name = row.tableName
+    spark.sql(f"DROP TABLE IF EXISTS {schema_path}.{table_name}")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC # Demo Variables
 
 # COMMAND ----------
 
-useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().get("user").get()
-first_name, last_name = useremail.split('@')[0].split('.')
+# MAGIC %skip
+# MAGIC useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().get("user").get()
+# MAGIC first_name, last_name = useremail.split('@')[0].split('.')
+
+# COMMAND ----------
+
+# DBTITLE 1,Key in user ID / get from widget
+# MAGIC %skip
+# MAGIC # Load the widgets
+# MAGIC dbutils.widgets.text("User", defaultValue="", label="User ID")
+# MAGIC dbutils.widgets.text("Email", defaultValue="", label="User Email")
+# MAGIC
+# MAGIC # note: widget can be used if running individual notebooks. However, if running from RUNME which establishes a job, the widget will not be available.
+
+# COMMAND ----------
+
+# Get the user ID from either the task, or from the widget
+# user = None
+# email = None
+user = "John Doe"
+email = "johndoe@gmail.com"
+
+# If the widget doesn't have a user defined
+if user is None or user == "":
+    try:
+        user = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_Sharepoint_Activity", key = "user", debugValue = "DEBUG_UNDEFINED")
+    except ValueError:
+        print("Error: no task value to pull from job")
+        user=None
+
+if user == None or user == "":
+    try:
+        user = dbutils.jobs.taskValues.get(taskKey = "Suspicious_Number_Of_Emails_Sent_By_Employee", key = "sender", debugValue = "DEBUG_UNDEFINED")
+    except ValueError:
+        print("Error: no task value to pull from job")
+        user=None
+
+if email is None or email == "":
+    try:
+        email = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_Sharepoint_Activity", key = "email", debugValue = "DEBUG_UNDEFINED")
+    except ValueError:
+        print("Error: no task value to pull from job")
+        user=None
+
+if email == None or email == "":
+    try:
+        email = dbutils.jobs.taskValues.get(taskKey = "Suspicious_Number_Of_Emails_Sent_By_Employee", key = "sender", debugValue = "DEBUG_UNDEFINED")
+    except ValueError:
+        print("Error: no task value to pull from job")
+        user=None
+
+# If the user is not defined, try the widget 
+if user is None or user=="DEBUG_UNDEFINED" or user == "":
+    user = dbutils.widgets.get("User")
+
+if user is None or user=="DEBUG_UNDEFINED" or user == "":
+    print("ERROR: No username")
+    raise Exception("Error: No username passed to notebook.")
+
+
+
+if email is None or email=="DEBUG_UNDEFINED" or email == "":
+    email = dbutils.widgets.get("Email")
+
+if email is None or email=="DEBUG_UNDEFINED" or email == "":
+    print("ERROR: No email")
+    raise Exception("Error: No email passed to notebook.")
+
+print(f"\n{'='*140}\n")
+print(f"The data being created will include the user '{user}' with the email of '{email}'")
+print(f"\n{'='*140}")
 
 # COMMAND ----------
 
 # Notebook level variables
-
 ###########################
 ## CHANGE ME AS REQUIRED ##
 ###########################
 debug = False
-target_user = f"{first_name.capitalize()} {last_name.capitalize()}" # The target malicious user
-target_user_email = useremail # The target malicious user's email
+target_user = user # The target malicious user
+target_user_email = email # The target malicious user's email
 target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User'
-target_catalog = first_name
-target_schema = "threat_detection"
+# target_catalog = first_name
+# target_schema = "threat_detection"
 
 # COMMAND ----------
 
-spark.sql(f"DROP SCHEMA IF EXISTS {target_catalog}.{target_schema} CASCADE")
+# MAGIC %skip
+# MAGIC spark.sql(f"DROP SCHEMA IF EXISTS {target_catalog}.{target_schema} CASCADE")
 
 # COMMAND ----------
 
-spark.sql(f"CREATE SCHEMA IF NOT EXISTS {target_catalog}.{target_schema}")
+# MAGIC %skip
+# MAGIC spark.sql(f"CREATE SCHEMA IF NOT EXISTS {target_catalog}.{target_schema}")
 
 # COMMAND ----------
 
@@ -122,7 +206,7 @@ if debug:
     df_logs.display()
 else:
     #df_logs.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/url_filtering') 
-    df_logs.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.url_filtering")
+    df_logs.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.url_filtering")
     df_logs.display()
 
 
@@ -208,7 +292,7 @@ if debug:
     df.display()
 else:
     #df.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/web_logs')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.web_logs")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.web_logs")
     df.display()
 
 
@@ -265,7 +349,7 @@ if debug:
 else:
     # Write delta table to temp directory
     #df.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/customer_logins')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.customer_logins")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.customer_logins")
 
     df.display()
 
@@ -369,7 +453,7 @@ if debug:
 else:
     # Write delta table to temp directory
     #df.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/sharepoint')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.sharepoint")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.sharepoint")
 
     df.display()
 
@@ -429,7 +513,7 @@ if debug:
 else:
     # Write table to temporary directory
     #df.write.format("delta").format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/user_logins')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.user_logins")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.user_logins")
 
     df.display()
 
@@ -449,7 +533,7 @@ if debug:
 else:
     # Write table to temporary directory  
     #df.write.format("delta").format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/workday')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.workday")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.workday")
     df.display()
 
 # COMMAND ----------
@@ -464,7 +548,7 @@ from datetime import datetime, timedelta
 def random_datetime_last_7_days():
     end_date = datetime.now()
     start_date = end_date - timedelta(days=7)
-    time_diff = (end_date - start_date).total_seconds()
+    time_diff = int((end_date - start_date).total_seconds())
     random_seconds = random.randint(0, time_diff)
     return start_date + timedelta(seconds=random_seconds)
 
@@ -517,7 +601,7 @@ if debug:
 else:
     # Write table to temporary directory
     #df.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/dlp')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.dlp")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.dlp")
     df.display()
 
 # COMMAND ----------
@@ -633,7 +717,7 @@ if debug:
 else:
     # Write delta table to temporary folder
     #df.write.format("delta").option("mergeSchema", "true").mode('overwrite').save('/tmp/detection_maturity/tables/antivirus')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.antivirus")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.antivirus")
     df.display()
 
 # COMMAND ----------
@@ -760,7 +844,7 @@ if debug:
 else:
     # Save DataFrame into a table
     #df.write.format("delta").option("mergeSchema", "true").mode("overwrite").save("/tmp/detection_maturity/tables/email")
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.email")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.email")
     df.display()
 
 # COMMAND ----------
@@ -821,7 +905,7 @@ if debug:
 else:
     # Save the logs to the specified path as a Delta table
     #df.write.format("delta").mode('overwrite').save('/tmp/detection_maturity/tables/ciam')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.ciam")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.ciam")
 
     # Show the first few rows of the generated logs (optional)
     df.display()
@@ -915,7 +999,7 @@ if debug:
 else:
     # Save the DataFrame as a table in the 'demo' database
     #df.write.format("delta").mode('overwrite').save('/tmp/detection_maturity/tables/alert')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.alert")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.alert")
     df.display()
 
 # COMMAND ----------
@@ -1001,11 +1085,12 @@ if debug:
 else:
     # Save the DataFrame as a table in the 'demo' database
     #df.write.format("delta").mode('overwrite').save('/tmp/detection_maturity/tables/investigation')
-    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.investigation")
+    df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.investigation")
     df.display()
 
 # COMMAND ----------
 
+# MAGIC %skip
 # MAGIC %fs ls /tmp/detection_maturity/tables
 # MAGIC
 
@@ -1037,7 +1122,7 @@ df = spark.createDataFrame(data, schema)
 
 # Write the data to the Delta location
 #df.write.format("delta").mode("overwrite").save("/tmp/detection_maturity/tables/response_table")
-df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{target_catalog}.{target_schema}.response_table")
+df.write.format("delta").option("mergeSchema", "true").mode('overwrite').saveAsTable(f"{schema_path}.response_table")
 
 # COMMAND ----------
 
@@ -1050,7 +1135,7 @@ new_users_df = spark.createDataFrame(new_user_row)
 
 # Append the new row to the existing Delta files at the specified path
 #new_users_df.write.format("delta").mode("append").save("/tmp/detection_maturity/tables/users")
-new_users_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{target_catalog}.{target_schema}.users")
+new_users_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{schema_path}.users")
 
 # COMMAND ----------
 
@@ -1100,7 +1185,7 @@ new_alert_row = {
 new_alert_df = spark.createDataFrame([new_alert_row], schema)
 
 # Append the new row to the existing Delta files at the specified path
-new_alert_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{target_catalog}.{target_schema}.alert")
+new_alert_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{schema_path}.alert")
 
 
 # Generate a random date within the last 30 days
@@ -1126,4 +1211,4 @@ new_alert_row = {
 new_alert_df = spark.createDataFrame([new_alert_row], schema)
 
 # Append the new row to the existing Delta files at the specified path
-new_alert_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{target_catalog}.{target_schema}.alert")
+new_alert_df.write.format("delta").option("mergeSchema", "true").mode('append').saveAsTable(f"{schema_path}.alert")

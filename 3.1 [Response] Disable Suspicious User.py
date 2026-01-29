@@ -47,7 +47,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Load Widget
-dbutils.widgets.text("User", defaultValue="", label="User ID")
+# dbutils.widgets.text("User", defaultValue="", label="User ID")
 
 # COMMAND ----------
 
@@ -77,13 +77,42 @@ dbutils.library.restartPython()
 # COMMAND ----------
 
 # DBTITLE 1,Load User from Job or Widget
+# MAGIC %skip
+# MAGIC # Get the user ID from either the task, or from the widget
+# MAGIC username = None
+# MAGIC
+# MAGIC # If the widget doesn't have a user defined
+# MAGIC if username is None or user == "":
+# MAGIC     try:
+# MAGIC         username = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_User", key = "user", debugValue = "DEBUG_UNDEFINED")
+# MAGIC     except ValueError:
+# MAGIC         print("Error: no task value to pull from job")
+# MAGIC         username=None
+# MAGIC
+# MAGIC # If the user is not defined, try the widget 
+# MAGIC if username is None or username=="DEBUG_UNDEFINED" or username == "":
+# MAGIC     username = dbutils.widgets.get("User")
+# MAGIC
+# MAGIC
+# MAGIC if username is None or username=="DEBUG_UNDEFINED" or username == "":
+# MAGIC     print("ERROR: No username to disable. Exit gacefully")
+# MAGIC     exit(0)
+# MAGIC
+# MAGIC print("---------------------------------------")
+# MAGIC print(f"The user being disabled is '{username}'")
+# MAGIC print("---------------------------------------")
+
+# COMMAND ----------
+
+# DBTITLE 1,Load User from Job or Widget with LLM
 # Get the user ID from either the task, or from the widget
 username = None
 
 # If the widget doesn't have a user defined
-if username is None or user == "":
+if username is None or username == "":
     try:
-        username = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_User", key = "user", debugValue = "DEBUG_UNDEFINED")
+        username = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_User_With_LLM", key = "user", debugValue = "DEBUG_UNDEFINED")
+        print(f"Get user '{username}' from taskKey='Investigate_Suspicious_User_With_LLM'")
     except ValueError:
         print("Error: no task value to pull from job")
         username=None
@@ -117,94 +146,96 @@ print("---------------------------------------")
 # COMMAND ----------
 
 # DBTITLE 1,Set Notebook Variables
-import requests
-from msal import ConfidentialClientApplication
-
-
-###########################
-## CHANGE ME AS REQUIRED ##
-###########################
-
-# Set this variable to True if the Graph API token and user account is configured.
-ENABLE_DEMO = False
-
-# Create a Databricks secret and set three keys that are specific to your Azure environment
-# To set up an Azure developer environment, follow https://azure.microsoft.com/en-ca/products/deployment-environments and create a Databricks secret 
-SECRET_SCOPE = "suspicious_user_demo_scope"
-AZURE_CLIENT_ID_KEY = "Azure_Client_ID"
-AZURE_APP_SECRET_KEY = "Azure_App_Secret"
-AZURE_TENANT_ID = "Azure_Tenant_ID"
+# MAGIC %skip
+# MAGIC import requests
+# MAGIC from msal import ConfidentialClientApplication
+# MAGIC
+# MAGIC
+# MAGIC ###########################
+# MAGIC ## CHANGE ME AS REQUIRED ##
+# MAGIC ###########################
+# MAGIC
+# MAGIC # Set this variable to True if the Graph API token and user account is configured.
+# MAGIC ENABLE_DEMO = False
+# MAGIC
+# MAGIC # Create a Databricks secret and set three keys that are specific to your Azure environment
+# MAGIC # To set up an Azure developer environment, follow https://azure.microsoft.com/en-ca/products/deployment-environments and create a Databricks secret 
+# MAGIC SECRET_SCOPE = "suspicious_user_demo_scope"
+# MAGIC AZURE_CLIENT_ID_KEY = "Azure_Client_ID"
+# MAGIC AZURE_APP_SECRET_KEY = "Azure_App_Secret"
+# MAGIC AZURE_TENANT_ID = "Azure_Tenant_ID"
 
 # COMMAND ----------
 
 # DBTITLE 1,Disable User in Azure AD
-def disable_user(user_id):
-    """
-    Disables a user in Azure Active Directory using the Microsoft Graph API.
-    
-    Parameters:
-        - user_id (str): The ID of the user to disable.
-    
-    Returns:
-        None
-    """
-    # Get API Token details from Databricks Secrets Manager
-    client_id = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_CLIENT_ID_KEY)
-    client_secret = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_APP_SECRET_KEY)
-    tenant_id = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_TENANT_ID)
-    
-    # Get the Azure API App context
-    app = ConfidentialClientApplication(
-        client_id,
-        authority=f"https://login.microsoftonline.com/{tenant_id}",
-        client_credential=client_secret,
-    )
-    
-    # Request a token
-    result = app.acquire_token_for_client(["https://graph.microsoft.com/.default"])
-    
-    # Use the token to make an API request to disable the user
-    if "access_token" in result:
-        token = result["access_token"]
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-type' : 'application/json'
-        }
-        data = {
-            "accountEnabled": False
-        }
-        response = requests.patch(f'https://graph.microsoft.com/v1.0/users/{user_id}', headers=headers, json=data)
-        if response.status_code == 204:
-            print(f"Successfully disabled user '{username}' (UID: '{user_id}').")
-        else:
-            raise ValueError(f'Could not disable user {user_id}. The API response was: {response.content}')
-    else:
-        # Print any error messages from requesting the API token
-        print(result.get("error"))
-        print(result.get("error_description"))
-        print(result.get("correlation_id"))  # You may need this when reporting a bug
-
-
-def disable_user_by_username(username):
-    """
-    Disables a user in Azure Active Directory using the Microsoft Graph API, given a username.
-    
-    Parameters:
-        - username (str): The username of the user to disable.
-    
-    Returns:
-        None
-    """
-    # Get the user GUID from the users table
-    df = spark.sql(f"SELECT ID FROM delta.`/tmp/detection_maturity/tables/users` WHERE Username = '{username}'")
-    
-    # Disable the user by the GUID
-    if df.count() > 0:
-        disable_user(df.first()['ID'])
-    else:
-         raise ValueError(f"Invalid user '{user}' passed to Notebook.") 
-
-
-# Call the disable_user_by_username function with a specific user 
-if ENABLE_DEMO:
-    disable_user_by_username(username)
+# MAGIC %skip
+# MAGIC def disable_user(user_id):
+# MAGIC     """
+# MAGIC     Disables a user in Azure Active Directory using the Microsoft Graph API.
+# MAGIC     
+# MAGIC     Parameters:
+# MAGIC         - user_id (str): The ID of the user to disable.
+# MAGIC     
+# MAGIC     Returns:
+# MAGIC         None
+# MAGIC     """
+# MAGIC     # Get API Token details from Databricks Secrets Manager
+# MAGIC     client_id = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_CLIENT_ID_KEY)
+# MAGIC     client_secret = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_APP_SECRET_KEY)
+# MAGIC     tenant_id = dbutils.secrets.get(scope = SECRET_SCOPE, key = AZURE_TENANT_ID)
+# MAGIC     
+# MAGIC     # Get the Azure API App context
+# MAGIC     app = ConfidentialClientApplication(
+# MAGIC         client_id,
+# MAGIC         authority=f"https://login.microsoftonline.com/{tenant_id}",
+# MAGIC         client_credential=client_secret,
+# MAGIC     )
+# MAGIC     
+# MAGIC     # Request a token
+# MAGIC     result = app.acquire_token_for_client(["https://graph.microsoft.com/.default"])
+# MAGIC     
+# MAGIC     # Use the token to make an API request to disable the user
+# MAGIC     if "access_token" in result:
+# MAGIC         token = result["access_token"]
+# MAGIC         headers = {
+# MAGIC             'Authorization': f'Bearer {token}',
+# MAGIC             'Content-type' : 'application/json'
+# MAGIC         }
+# MAGIC         data = {
+# MAGIC             "accountEnabled": False
+# MAGIC         }
+# MAGIC         response = requests.patch(f'https://graph.microsoft.com/v1.0/users/{user_id}', headers=headers, json=data)
+# MAGIC         if response.status_code == 204:
+# MAGIC             print(f"Successfully disabled user '{username}' (UID: '{user_id}').")
+# MAGIC         else:
+# MAGIC             raise ValueError(f'Could not disable user {user_id}. The API response was: {response.content}')
+# MAGIC     else:
+# MAGIC         # Print any error messages from requesting the API token
+# MAGIC         print(result.get("error"))
+# MAGIC         print(result.get("error_description"))
+# MAGIC         print(result.get("correlation_id"))  # You may need this when reporting a bug
+# MAGIC
+# MAGIC
+# MAGIC def disable_user_by_username(username):
+# MAGIC     """
+# MAGIC     Disables a user in Azure Active Directory using the Microsoft Graph API, given a username.
+# MAGIC     
+# MAGIC     Parameters:
+# MAGIC         - username (str): The username of the user to disable.
+# MAGIC     
+# MAGIC     Returns:
+# MAGIC         None
+# MAGIC     """
+# MAGIC     # Get the user GUID from the users table
+# MAGIC     df = spark.sql(f"SELECT ID FROM delta.`/tmp/detection_maturity/tables/users` WHERE Username = '{username}'")
+# MAGIC     
+# MAGIC     # Disable the user by the GUID
+# MAGIC     if df.count() > 0:
+# MAGIC         disable_user(df.first()['ID'])
+# MAGIC     else:
+# MAGIC          raise ValueError(f"Invalid user '{user}' passed to Notebook.") 
+# MAGIC
+# MAGIC
+# MAGIC # Call the disable_user_by_username function with a specific user 
+# MAGIC if ENABLE_DEMO:
+# MAGIC     disable_user_by_username(username)

@@ -1,17 +1,19 @@
-# Threat-Detection-Demo
-This is a Databricks Cybersecurity demo for building linked detection, investigation and response jobs in Databricks Workflows. It is originally based on the work of [David Wells](https://github.com/DavidWells-DB/Suspicious-User-Activity-Demo). This verison has been updated with additional alerting, a Threat Detection dashboard, and integration with Databricks' Unity Catalog.
+# Threat-Detection-and-Reporting-with-LLM
+This is a Databricks Cybersecurity demo for building linked detection, investigation and response jobs in Databricks Workflows. It is originally based on the work of [David Wells](https://github.com/DavidWells-DB/Suspicious-User-Activity-Demo), and later [Kristin Dahl](https://github.com/kristin-db/Threat-Detection-Demo). Kristin's version updated the demo with additional alerting, a Threat Detection dashboard, and integration with Databricks' Unity Catalog. This version is updated with the implementation of Large Language Models (LLM)s that are available for use in Databricks and email reporting, while enhancing job creation and auto-run. Emphasis on this version is that it operates entirely under the Databricks Free Edition.
 
 ## Overview
-The Threat-Detection-Demo is designed to show how to use Databricks to detect, investigate, and response to a cybersecurity threat. In this demo, we focus on two concepts:
+The Threat-Detection-and-Reporting-with-LLM is designed to show how to use Databricks to detect, investigate, and response to a cybersecurity threat. In this demo, we focus on three concepts:
 - Using pre-built functions in Databricks to perform increasingly complex detection methods.
 - Show how to create a Detection -> Investigation -> Response workflow that can pass information across Notebooks.
+- Implement LLM where applicable for learning purposes and code dynamicity.
 
 ## Setup and Requirements
 To run this demo, you'll need:
 - A Databricks workspace
 - Permission to write to create new catalogs and schemas in your workspace.
 - Basic knowledge of Apache Spark
-- An Azure Entra user ID and Graph API token
+- An Azure Entra user ID and Graph API token `[optional]`
+- Have an app password for your email to enable email reporting
 
 ## Installation and Usage
 To use this repo:
@@ -31,7 +33,8 @@ Once complete, you can use this repo in three ways:
    1. Leading to an Azure Entra account being disabled
 1. Open and run the `1.0 Evolving Use Cases` notebook, which showcases executing each Detection helper function against randomly generated events
 1. Manually run the Detection, Investigation and Response notebooks
-   - Note: Manually run the [0.1 Data Creation](https://github.com/kristin-db/Threat-Detection-Demo/blob/main/0.1%20Data%20Creation.py) and [3.1 \[Response\] Disable Suspicious User](https://github.com/kristin-db/Threat-Detection-Demo/blob/main/3.1%20%5BResponse%5D%20Disable%20Suspicious%20User.py) notebook first.
+   - Note: [2.2 \[Investigation\] Investigate Suspicious User with LLM]() is an updated version of [2.1 \[Investigation\] Investigate Suspicious User]() which was originally done by [Kristin Dahl]() and kept here for authorship reasons.
+- Note: Regardless of which method you choose to run, each notebook should be visited and variables should be tailored to your preferences (e.g. the name of the investigated user). This includes changing email credentials to receive the email report.
 
 ## Helper Methods
 The `0.0 Helper Methods` Notebook contains example functions that you can use in your environment to perform simple detections. The helper functions include:

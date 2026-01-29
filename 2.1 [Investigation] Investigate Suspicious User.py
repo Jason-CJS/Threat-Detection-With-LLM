@@ -96,9 +96,9 @@ print("---------------------------------------")
 
 # DBTITLE 1,Collect User, Workstation and Department Data
 # Get Active Directory table data
-user_logins = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.user_logins")
+user_logins = spark.read.format("delta").table(f"{schema_path}.user_logins")
 user_logins = filter_by_relative_time(user_logins, weeks=1, time_column="date")
-workday_user_data = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.workday")
+workday_user_data = spark.read.format("delta").table(f"{schema_path}.workday")
 
 
 # Filter all logons with the user
@@ -137,7 +137,7 @@ if len(user_hosts) == 0:
     print("No hostname to associate antivirus logs with.")
     print("---------------------------------------")
 else:
-    antivirus = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.antivirus")
+    antivirus = spark.read.format("delta").table(f"{schema_path}.antivirus")
 
     antivirus = filter_by_relative_time(antivirus, weeks=1, time_column="time")
     user_av = filter_columns_by_values(antivirus, filters={"hostname": user_hosts}, is_and_operator=False)
@@ -183,7 +183,7 @@ user_av.display()
 
 # DBTITLE 1,Check DLP Logs
 # Load DLP Logs
-dlp = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.dlp")
+dlp = spark.read.format("delta").table(f"{schema_path}.dlp")
 dlp = filter_by_relative_time(dlp, weeks=1, time_column="timestamp")
 
 #Find all unblocked medium+ events that DLP has identified
@@ -225,7 +225,7 @@ dlp_high_unblocked.display()
 # COMMAND ----------
 
 # DBTITLE 1,Check URL Proxy Logs
-url_filtering = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.url_filtering")
+url_filtering = spark.read.format("delta").table(f"{schema_path}.url_filtering")
 url_filtering = filter_by_relative_time(url_filtering, weeks=1, time_column="date")
 
 user_urls = filter_columns_by_values(url_filtering, {"ip_address": user_ips, "url_category": "Malware"})

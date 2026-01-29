@@ -31,135 +31,243 @@ dbutils.library.restartPython()
 
 # COMMAND ----------
 
-from solacc.companion import NotebookSolutionCompanion
+# MAGIC %skip
+# MAGIC from solacc.companion import NotebookSolutionCompanion
 
 # COMMAND ----------
 
-job_json = {
-    "name": "Threat_Detection_Investigation",
-    "email_notifications": {
-        "no_alert_for_skipped_runs": False
-    },
-    "webhook_notifications": {},
-    "timeout_seconds": 0,
-    "max_concurrent_runs": 1,
-    "tasks": [
-        {
-            "task_key": "Generate_Data",
-            "run_if": "ALL_SUCCESS",
-            "notebook_task": {
-                "notebook_path": f"/0.1 Data Creation",
-                "source": "WORKSPACE"
-            },
-            "job_cluster_key": "Threat_Detection_Cluster",
-            "timeout_seconds": 0,
-            "email_notifications": {}
-        },
-        {
-            "task_key": "Investigate_Suspicious_Sharepoint_Activity",
-            "depends_on": [
-                {
-                    "task_key": "Generate_Data"
-                }
-            ],
-            "run_if": "ALL_SUCCESS",
-            "notebook_task": {
-                "notebook_path": f"/1.1 [Detection] Investigate Suspicious Document Access Activity",
-                "source": "WORKSPACE"
-            },
-            "job_cluster_key": "Threat_Detection_Cluster",
-            "timeout_seconds": 0,
-            "email_notifications": {}
-        },
-        {
-            "task_key": "Suspicious_Number_Of_Emails_Sent_By_Employee",
-            "depends_on": [
-                {
-                    "task_key": "Generate_Data"
-                }
-            ],
-            "run_if": "ALL_SUCCESS",
-            "notebook_task": {
-                "notebook_path": f"1.2 [Detection] Suspicious Number of Emails Sent by Sender",
-                "source": "WORKSPACE"
-            },
-            "job_cluster_key": "Threat_Detection_Cluster",
-            "timeout_seconds": 0,
-            "email_notifications": {}
-        },
-        {
-            "task_key": "Investigate_Suspicious_User",
-            "depends_on": [
-                {
-                    "task_key": "Investigate_Suspicious_Sharepoint_Activity"
-                },
-                {
-                    "task_key": "Suspicious_Number_Of_Emails_Sent_By_Employee"
-                }
-            ],
-            "run_if": "ALL_SUCCESS",
-            "notebook_task": {
-                "notebook_path": f"2.1 [Investigation] Investigate Suspicious User",
-                "source": "WORKSPACE"
-            },
-            "job_cluster_key": "Threat_Detection_Cluster",
-            "timeout_seconds": 0,
-            "email_notifications": {}
-        },
-        {
-            "task_key": "Disable_Suspicious_User",
-            "depends_on": [
-                {
-                    "task_key": "Investigate_Suspicious_User"
-                }
-            ],
-            "run_if": "ALL_SUCCESS",
-            "notebook_task": {
-                "notebook_path": f"3.1 [Response] Disable Suspicious User",
-                "source": "WORKSPACE"
-            },
-            "job_cluster_key": "Threat_Detection_Cluster",
-            "timeout_seconds": 0,
-            "email_notifications": {}
-        }
-    ],
-    "job_clusters": [
-      {
-        "job_cluster_key": "Threat_Detection_Cluster",
-        "new_cluster": {
-          "cluster_name": "",
-          "spark_version": "15.4.x-scala2.12",
-          "spark_conf": {
-            "spark.master": "local[*, 4]",
-            "spark.databricks.cluster.profile": "singleNode"
-          },
-          "aws_attributes": {
-            "first_on_demand": 1,
-            "availability": "SPOT_WITH_FALLBACK",
-            "zone_id": "us-west-2a",
-            "spot_bid_price_percent": 100
-          },
-          "node_type_id": {"AWS": "m5d.large", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
-          "driver_node_type_id": "m5d.large",
-          "custom_tags": {
-            "ResourceClass": "SingleNode"
-          },
-          "enable_elastic_disk": true,
-          "data_security_mode": "SINGLE_USER",
-          "runtime_engine": "PHOTON",
-          "num_workers": 0
-        }
-      }
-    ],
-    "tags": {
-        "ID": "2024.01.10",
-        "Team": "Cybersecurity"
-    },
-    "format": "MULTI_TASK"
-}
+# MAGIC %skip
+# MAGIC job_json = {
+# MAGIC     "name": "Threat_Detection_Investigation",
+# MAGIC     "email_notifications": {
+# MAGIC         "no_alert_for_skipped_runs": False
+# MAGIC     },
+# MAGIC     "webhook_notifications": {},
+# MAGIC     "timeout_seconds": 0,
+# MAGIC     "max_concurrent_runs": 1,
+# MAGIC     "tasks": [
+# MAGIC         {
+# MAGIC             "task_key": "Generate_Data",
+# MAGIC             "run_if": "ALL_SUCCESS",
+# MAGIC             "notebook_task": {
+# MAGIC                 "notebook_path": f"/0.1 Data Creation",
+# MAGIC                 "source": "WORKSPACE"
+# MAGIC             },
+# MAGIC             "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC             "timeout_seconds": 0,
+# MAGIC             "email_notifications": {}
+# MAGIC         },
+# MAGIC         {
+# MAGIC             "task_key": "Investigate_Suspicious_Sharepoint_Activity",
+# MAGIC             "depends_on": [
+# MAGIC                 {
+# MAGIC                     "task_key": "Generate_Data"
+# MAGIC                 }
+# MAGIC             ],
+# MAGIC             "run_if": "ALL_SUCCESS",
+# MAGIC             "notebook_task": {
+# MAGIC                 "notebook_path": f"/1.1 [Detection] Investigate Suspicious Document Access Activity",
+# MAGIC                 "source": "WORKSPACE"
+# MAGIC             },
+# MAGIC             "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC             "timeout_seconds": 0,
+# MAGIC             "email_notifications": {}
+# MAGIC         },
+# MAGIC         {
+# MAGIC             "task_key": "Suspicious_Number_Of_Emails_Sent_By_Employee",
+# MAGIC             "depends_on": [
+# MAGIC                 {
+# MAGIC                     "task_key": "Generate_Data"
+# MAGIC                 }
+# MAGIC             ],
+# MAGIC             "run_if": "ALL_SUCCESS",
+# MAGIC             "notebook_task": {
+# MAGIC                 "notebook_path": f"1.2 [Detection] Suspicious Number of Emails Sent by Sender",
+# MAGIC                 "source": "WORKSPACE"
+# MAGIC             },
+# MAGIC             "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC             "timeout_seconds": 0,
+# MAGIC             "email_notifications": {}
+# MAGIC         },
+# MAGIC         {
+# MAGIC             "task_key": "Investigate_Suspicious_User",
+# MAGIC             "depends_on": [
+# MAGIC                 {
+# MAGIC                     "task_key": "Investigate_Suspicious_Sharepoint_Activity"
+# MAGIC                 },
+# MAGIC                 {
+# MAGIC                     "task_key": "Suspicious_Number_Of_Emails_Sent_By_Employee"
+# MAGIC                 }
+# MAGIC             ],
+# MAGIC             "run_if": "ALL_SUCCESS",
+# MAGIC             "notebook_task": {
+# MAGIC                 "notebook_path": f"2.1 [Investigation] Investigate Suspicious User",
+# MAGIC                 "source": "WORKSPACE"
+# MAGIC             },
+# MAGIC             "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC             "timeout_seconds": 0,
+# MAGIC             "email_notifications": {}
+# MAGIC         },
+# MAGIC         {
+# MAGIC             "task_key": "Disable_Suspicious_User",
+# MAGIC             "depends_on": [
+# MAGIC                 {
+# MAGIC                     "task_key": "Investigate_Suspicious_User"
+# MAGIC                 }
+# MAGIC             ],
+# MAGIC             "run_if": "ALL_SUCCESS",
+# MAGIC             "notebook_task": {
+# MAGIC                 "notebook_path": f"3.1 [Response] Disable Suspicious User",
+# MAGIC                 "source": "WORKSPACE"
+# MAGIC             },
+# MAGIC             "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC             "timeout_seconds": 0,
+# MAGIC             "email_notifications": {}
+# MAGIC         }
+# MAGIC     ],
+# MAGIC     "job_clusters": [
+# MAGIC       {
+# MAGIC         "job_cluster_key": "Threat_Detection_Cluster",
+# MAGIC         "new_cluster": {
+# MAGIC           "cluster_name": "",
+# MAGIC           "spark_version": "15.4.x-scala2.12",
+# MAGIC           "spark_conf": {
+# MAGIC             "spark.master": "local[*, 4]",
+# MAGIC             "spark.databricks.cluster.profile": "singleNode"
+# MAGIC           },
+# MAGIC           "aws_attributes": {
+# MAGIC             "first_on_demand": 1,
+# MAGIC             "availability": "SPOT_WITH_FALLBACK",
+# MAGIC             "zone_id": "us-west-2a",
+# MAGIC             "spot_bid_price_percent": 100
+# MAGIC           },
+# MAGIC           "node_type_id": {"AWS": "m5d.large", "MSA": "Standard_DS3_v2", "GCP": "n1-highmem-4"},
+# MAGIC           "driver_node_type_id": "m5d.large",
+# MAGIC           "custom_tags": {
+# MAGIC             "ResourceClass": "SingleNode"
+# MAGIC           },
+# MAGIC           "enable_elastic_disk": true,
+# MAGIC           "data_security_mode": "SINGLE_USER",
+# MAGIC           "runtime_engine": "PHOTON",
+# MAGIC           "num_workers": 0
+# MAGIC         }
+# MAGIC       }
+# MAGIC     ],
+# MAGIC     "tags": {
+# MAGIC         "ID": "2024.01.10",
+# MAGIC         "Team": "Cybersecurity"
+# MAGIC     },
+# MAGIC     "format": "MULTI_TASK"
+# MAGIC }
 
 # COMMAND ----------
 
-dbutils.widgets.dropdown("run_job", "False", ["True", "False"])
-run_job = dbutils.widgets.get("run_job") == "True"
-NotebookSolutionCompanion().deploy_compute(job_json, run_job=run_job)
+# MAGIC %skip
+# MAGIC dbutils.widgets.dropdown("run_job", "False", ["True", "False"])
+# MAGIC run_job = dbutils.widgets.get("run_job") == "True"
+# MAGIC NotebookSolutionCompanion().deploy_compute(job_json, run_job=run_job)
+
+# COMMAND ----------
+
+# DBTITLE 1,Create a job to run on Serverless cluster for Databricks Free Edition
+import time 
+from databricks.sdk import WorkspaceClient
+from databricks.sdk.service.jobs import Task, NotebookTask, TaskDependency, JobEmailNotifications, TaskEmailNotifications
+
+w = WorkspaceClient()
+
+email = "____@gmail.com" # insert your own email
+job_name = "Threat Detection with LLM"
+existing_jobs = [j for j in w.jobs.list() if j.settings and j.settings.name == job_name]
+
+if existing_jobs:
+    print(f"Job name='{job_name}' already exist (job_id={existing_jobs[0].job_id}). Please delete it in the GUI before creating it.")
+else:
+    job = w.jobs.create(
+        name = job_name,
+        timeout_seconds = 0,
+        max_concurrent_runs=1,
+        email_notifications = JobEmailNotifications(
+            on_success = [email],
+            on_failure = [email]
+        ),
+        tasks = [
+            Task(
+                task_key = "Generate_Data",
+                timeout_seconds = 0,
+                description = "Generate Sample Data",
+                notebook_task = NotebookTask(
+                    notebook_path = "/Workspace/Users/Threat-Detection-With-LLM/0.1 Data Creation", # paste your own notebook file path
+                    base_parameters = {"cluster-name": "Serverless"},
+                ),
+                email_notifications = TaskEmailNotifications(
+                    on_success = [email],
+                    on_failure = [email]
+                )
+            ),
+            Task(
+                task_key = "Investigate_Suspicious_Sharepoint_Activity",
+                timeout_seconds = 0,
+                description = "Investigate Suspivious Sharepoint Activity",
+                depends_on = [TaskDependency(task_key = "Generate_Data")],
+                notebook_task = NotebookTask(
+                    notebook_path = "/Workspace/Users/Threat-Detection-With-LLM/1.1 [Detection] Investigate Suspicious Document Access Activity", # paste your own notebook file path
+                    base_parameters = {"cluster-name": "Serverless"},
+                ),
+                email_notifications = TaskEmailNotifications(
+                    on_success = [email],
+                    on_failure = [email]
+                )
+            ),
+            Task(
+                task_key = "Suspicious_Number_Of_Emails_Sent_By_Employee",
+                timeout_seconds = 0,
+                description = "Suspicious Number Of Emails Sent By Employee",
+                depends_on = [TaskDependency(task_key = "Generate_Data")],
+                notebook_task = NotebookTask(
+                    notebook_path = "/Workspace/Users/Threat-Detection-With-LLM/1.2 [Detection] Suspicious Number of Emails Sent by Sender", # paste your own notebook file path
+                    base_parameters = {"cluster-name": "Serverless"},
+                ),
+                email_notifications = TaskEmailNotifications(
+                    on_success = [email],
+                    on_failure = [email]
+                )
+            ),
+            Task(
+                task_key = "Investigate_Suspicious_User_With_LLM",
+                timeout_seconds = 0,
+                description = "Investigate Suspicious User With LLM",
+                depends_on = [TaskDependency(task_key = "Investigate_Suspicious_Sharepoint_Activity"),
+                              TaskDependency(task_key = "Suspicious_Number_Of_Emails_Sent_By_Employee")],
+                notebook_task = NotebookTask(
+                    notebook_path = "/Workspace/Users//Threat-Detection-With-LLM/2.2 [Investigation] Investigate Suspicious User with LLM", # paste your own notebook file path
+                    base_parameters = {"cluster-name": "Serverless"},
+                ),
+                email_notifications = TaskEmailNotifications(
+                    on_success = [email],
+                    on_failure = [email]
+                )
+            ),
+            Task(
+                task_key = "Disable_Suspicious_User",
+                timeout_seconds = 0,
+                description = "Disable Suspicious User",
+                depends_on = [TaskDependency(task_key = "Investigate_Suspicious_User_With_LLM")],
+                notebook_task = NotebookTask(
+                    notebook_path = "/Workspace/Users/Threat-Detection-With-LLM/3.1 [Response] Disable Suspicious User", # paste your own notebook file path
+                    base_parameters = {"cluster-name": "Serverless"},
+                ),
+                email_notifications = TaskEmailNotifications(
+                    on_success = [email],
+                    on_failure = [email]
+                )
+            )
+        ]
+    )
+    job_id = job.job_id
+    print(f"Job name='{job_name}' (job_id={job_id}) has been created successully and will start run after 30 seconds.")
+    time.sleep(30)
+    run = w.jobs.run_now(job_id)
+    run_id = run.run_id
+    print(f"Job name='{job_name}' (job_id={job_id}) with run_id={run_id} has been started and is running.")
+

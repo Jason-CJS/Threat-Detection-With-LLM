@@ -72,7 +72,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Detect Users Accessing Suspiciously Significant Number of Sharepoint Files
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.sharepoint")
+df = spark.read.format("delta").table(f"{schema_path}.sharepoint")
 df = statistically_significant_window_by_std(df, "user_id", timestamp_column="date", no_minimum_window_events=7, current_window_is_multiple_of_mean=3.0)
 dbutils.jobs.taskValues.set(key = 'user', value = df.first()['user_id'])
 df.display()

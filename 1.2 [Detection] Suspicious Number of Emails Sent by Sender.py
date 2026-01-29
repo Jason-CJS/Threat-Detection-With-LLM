@@ -72,7 +72,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Detect Users Sending Statistically Significant Number of Emails
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.email")
+df = spark.read.format("delta").table(f"{schema_path}.email")
 df = statistically_significant_window_by_std(df, comparative_column="sender", timestamp_column="date", no_minimum_window_events=7, current_window_is_multiple_of_mean=3.0)
 
 # Note: This method purposfully doesn't generate a result to showcase grouping detections together for the investigation notebook.

@@ -48,7 +48,7 @@
 # COMMAND ----------
 
 # DBTITLE 1,Detect Users Accessing Malicious URLs
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.url_filtering")
+df = spark.read.format("delta").table(f"{schema_path}.url_filtering")
 df = filter_by_relative_time(df, days=1, time_column="date")
 df = filter_columns_by_values(df, {"url_category": ["Malware", "Trojan"]})
 df.show()
@@ -66,7 +66,7 @@ df.show()
 # COMMAND ----------
 
 # DBTITLE 1,Detect IPs With High Number of Connections In The Past 24 Hours
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.web_logs")
+df = spark.read.format("delta").table(f"{schema_path}.web_logs")
 df = filter_by_relative_time(df, time_column="timestamp", days=1)
 df = threshold_based_rule(df=df, groupby_column="ip", threshold=100)
 df.display()
@@ -83,7 +83,7 @@ df.display()
 # COMMAND ----------
 
 # DBTITLE 1,Detect User With An Anomalous Number of Files Accessed Compared To Peers
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.ciam")
+df = spark.read.format("delta").table(f"{schema_path}.ciam")
 df = filter_by_relative_time(df, days=1, time_column="_event_date")
 df = filter_columns_by_values(df, {"outcome": ["DENIED", "BLOCKED"]})
 df = statistical_anomaly_detection_group_by(df, "login_id")
@@ -100,7 +100,7 @@ df.display()
 
 # COMMAND ----------
 
-df = spark.read.format("delta").table(f"{target_catalog}.{target_schema}.sharepoint")
+df = spark.read.format("delta").table(f"{schema_path}.sharepoint")
 df_std = statistically_significant_window_by_std(df, comparative_column="user_id", timestamp_column="date", no_minimum_window_events=7, current_window_is_multiple_of_mean=3.0)
 df_std.display()
 

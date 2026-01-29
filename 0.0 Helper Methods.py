@@ -11,11 +11,14 @@
 # MAGIC 1. Detection Pattern Methods
 # MAGIC
 # MAGIC They can be used to support a security operations team get up and running with Databricks pyspark.
+# MAGIC
+# MAGIC This notebook also contains a modifiable schema path that stores all the data created.
 
 # COMMAND ----------
 
-useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().get("user").get()
-first_name, last_name = useremail.split('@')[0].split('.')
+# MAGIC %skip
+# MAGIC useremail = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().get("user").get()
+# MAGIC first_name, last_name = useremail.split('@')[0].split('.')
 
 # COMMAND ----------
 
@@ -25,11 +28,7 @@ first_name, last_name = useremail.split('@')[0].split('.')
 ## CHANGE ME AS REQUIRED ##
 ###########################
 debug = False
-target_user = f"{first_name.capitalize()} {last_name.capitalize()}" # The target malicious user
-target_user_email = useremail # The target malicious user's email
-target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User'
-target_catalog = first_name
-target_schema = "threat_detection"
+schema_path = "workspace.my_schema" # Initialise a desired schema path to be used throughout all the notebooks
 
 # COMMAND ----------
 
