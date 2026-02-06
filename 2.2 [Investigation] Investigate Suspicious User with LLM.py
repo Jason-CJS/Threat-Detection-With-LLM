@@ -85,6 +85,11 @@ SYSTEM_PROMPT = f"""
                 - If input is empty, reply: 'No content is available, please ask a question.'
                 - If input contains 'INSTRUCTION:', reply with the words after 'INSTRUCTION:'.
                 - Avoid showing unnecessary codes or program formats if not requested.
+                
+                Important response rules:
+                - No markdown code blocks (```...```).
+                - Do not wrap the response in quotes.
+                - Do not escape quotes.
                 """
 
 # This function gets a response from the desired LLM allows user to ask queries while changing system prompt if wanted
@@ -222,14 +227,14 @@ workday_user_data = spark.read.format("delta").table(f"{schema_path}.workday")
 user_logins = filter_column_by_value(user_logins, "user_id", user)
 
 # Get the unique hosts for this user 
-user_logins = user_logins.select(F.col('dest_hostname'), F.col("src_ip")).distinct()
+user_logins = user_logins.select(F.col("dest_hostname"), F.col("src_ip")).distinct()
 
 # Extract the data into variables
-user_hosts = [row['dest_hostname'] for row in user_logins.collect()]
-user_ips = [row['src_ip'] for row in user_logins.collect()]
+user_hosts = [row["dest_hostname"] for row in user_logins.collect()]
+user_ips = [row["src_ip"] for row in user_logins.collect()]
 user_department_data = filter_column_by_value(workday_user_data, "employee", user)
-user_department = user_department_data.first()['department']
-user_title = user_department_data.first()['title']
+user_department = user_department_data.first()["department"]
+user_title = user_department_data.first()["title"]
 
 print(f"\n{'='*140}\n")
 print(f"User '{user}' is a '{user_title}' in the '{user_department}' department.")
@@ -423,8 +428,8 @@ output_eval2 = output_final
 severity = ""
 recommendation = ""
 try:
-    severity = output_final.split(';')[1].split('=')[1].strip().capitalize()
-    recommendation = output_final.split(';')[2].split('=')[1].strip().capitalize()
+    severity = output_final.split(";")[1].split("=")[1].strip().capitalize()
+    recommendation = output_final.split(";")[2].split("=")[1].strip().capitalize()
 except Exception as e:
     print(f"Error: Error getting severity / recoomendation values: {e}")
 
@@ -432,7 +437,7 @@ print(f"\n{'='*140}\n\nSeverity: {severity}\nRecommendation: It is recommended {
 
 # If the investigation produces a high-severity event, then automatically disable the user in Azure Active Directory
 if severity == "High":
-    dbutils.jobs.taskValues.set(key = 'user', value = user)
+    dbutils.jobs.taskValues.set(key = "user", value = user)
 elif severity == "Medium":
     # The SOC will review this notebook and investigate the user
     pass
@@ -449,11 +454,13 @@ from mlflow.genai.scorers import Correctness, RelevanceToQuery, Safety, Expectat
 mlflow.set_tracking_uri("databricks")
 mlflow.set_experiment("/Shared/Threat_Detection_with_LLM") # insert own experiment path
 
+user_eval = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_Sharepoint_Activity", key = "user", debugValue = "DEBUG_UNDEFINED") # allows for more dynamicity
+
 eval_dataset = [
                     {
                         "inputs": {"query": f"Who was being identified as to having a threat to the system based on:<br> {output_eval}?"},
                         "expectations": {
-                            "expected_facts": ["John Doe"],
+                            "expected_facts": [f"{user_eval}"],
                             "guidelines": ["The response must be factual"]
                         }
                     },
@@ -659,17 +666,17 @@ app_password = "" # Do not use your regular email password, instead use an app p
 
 subject = "Databricks Notification: Threat Detection with LLM Investigation Report"
 footer = f"""
-            This is an auto-generated email sent from Databricks using Gmail SMTP
+This is an auto-generated email sent from Databricks using Gmail SMTP
 
-            System time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-            Australian Western Standard Time (AWST): {datetime.now(timezone('Australia/Perth')).strftime('%Y-%m-%d %H:%M:%S')}
-        """
+System time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Australian Western Standard Time (AWST): {datetime.now(timezone('Australia/Perth')).strftime('%Y-%m-%d %H:%M:%S')}
+"""
     
 # Create the email message
 msg = MIMEMultipart()
-msg['From'] = sender_email
-msg['To'] = receiver_email
-msg['Subject'] = subject
+msg["From"] = sender_email
+msg["To"] = receiver_email
+msg["Subject"] = subject
 msg.attach(MIMEText(report_html, "html"))
 msg.attach(MIMEText(footer, "plain"))
 

@@ -22,6 +22,7 @@
 
 # COMMAND ----------
 
+# DBTITLE 1,Modify schema path
 # Notebook level variables
 
 ###########################
@@ -340,7 +341,7 @@ def filter_columns_by_date_ranges(df, filters):
     return df
 
 # 3c. Filter by Datetime
-def filter_by_time(df, start_time, end_time, time_column='_event_time'):
+def filter_by_time(df, start_time, end_time, time_column="_event_time"):
     """
     Filters a DataFrame based on a specified time range.
 
@@ -360,7 +361,7 @@ def filter_by_time(df, start_time, end_time, time_column='_event_time'):
 
 
 # 3d. Filter by Relative Datetime
-def filter_by_relative_time(df, weeks=0, days=0, hours=0, minutes=0, seconds=0, microseconds=0, milliseconds=0, time_column='_event_time'):
+def filter_by_relative_time(df, weeks=0, days=0, hours=0, minutes=0, seconds=0, microseconds=0, milliseconds=0, time_column="_event_time"):
     """
     Filters a DataFrame based on a specified time range relative to the current time.
 
@@ -387,7 +388,7 @@ def filter_by_relative_time(df, weeks=0, days=0, hours=0, minutes=0, seconds=0, 
     """
     current_time = datetime.now()
     filter_time = current_time - timedelta(weeks=weeks,  days=days, hours=hours, minutes=minutes, seconds=seconds, microseconds=microseconds, milliseconds=milliseconds)
-    filter_time_str = filter_time.strftime('%Y-%m-%d %H:%M:%S')
+    filter_time_str = filter_time.strftime("%Y-%m-%d %H:%M:%S")
     return df.filter(F.col(time_column) >= filter_time_str)
 
 # 4a. Filter by Null values by OR
@@ -608,7 +609,7 @@ def threshold_based_rule(df, threshold, groupby_column=None, sum_column=None):
     """
 
     # The name of the optional temporary column to hold the truncated timestamp
-    default_sum_column_name = 'sum_column_tmp'
+    default_sum_column_name = "sum_column_tmp"
 
     # Create a dummy summation column if the 'count_column' is None
     if sum_column is None:
@@ -638,7 +639,7 @@ def threshold_based_rule_multiple_group_by(df, groupby_columns, threshold, sum_c
     Returns:
     pyspark.sql.DataFrame: The grouped and filtered DataFrame.
     """
-    default_sum_column_name = 'count_column_tmp'
+    default_sum_column_name = "count_column_tmp"
 
     # Create a dummy summation column if the 'sum_column' is None
     if sum_column is None:
@@ -647,7 +648,7 @@ def threshold_based_rule_multiple_group_by(df, groupby_columns, threshold, sum_c
 
     # Group the DataFrame by the groupby_column, count the rows in each group,
     # and filter the groups where the count is greater than the threshold
-    return df.groupBy(*groupby_columns).agg(F.sum(F.col(sum_column)).alias(sum_column+'_total')).filter(F.col(sum_column+'_total') > threshold)
+    return df.groupBy(*groupby_columns).agg(F.sum(F.col(sum_column)).alias(sum_column+"_total")).filter(F.col(sum_column+"_total") > threshold)
 
 
 # This function detects statistical anomalies in a DataFrame based on a z-score threshold
@@ -665,13 +666,13 @@ def statistical_anomaly_detection(df, comparitive_column, z_score_threshold=3.0)
     """
 
     # Calculate the mean and standard deviation of the comparitive_column
-    stats = df.select(F.mean(F.col(comparitive_column)).alias('mean'), F.stddev(
-        F.col(comparitive_column)).alias('stddev')).collect()[0]
+    stats = df.select(F.mean(F.col(comparitive_column)).alias("mean"), F.stddev(
+        F.col(comparitive_column)).alias("stddev")).collect()[0]
     
     # Filter the DataFrame where the absolute difference between the comparitive_column and the mean
     # is greater than the z_score_threshold times the standard deviation
-    df = df.filter(F.abs(F.col(comparitive_column) - stats['mean']) > z_score_threshold * stats['stddev'])
-    df = df.withColumn("Mean", lit(stats['mean'])).withColumn("stddev", lit(stats['stddev']))
+    df = df.filter(F.abs(F.col(comparitive_column) - stats["mean"]) > z_score_threshold * stats["stddev"])
+    df = df.withColumn("Mean", lit(stats["mean"])).withColumn("stddev", lit(stats["stddev"]))
 
     return df
 
@@ -692,7 +693,7 @@ def statistical_anomaly_detection_group_by(df, group_by_column, sum_column=None,
     """
 
     # The name of the optional temporary column to hold the truncated timestamp
-    default_sum_column_name = 'sum_column_tmp'
+    default_sum_column_name = "sum_column_tmp"
 
     # Create a dummy summation column if the 'count_column' is None
     if sum_column is None:
@@ -701,7 +702,7 @@ def statistical_anomaly_detection_group_by(df, group_by_column, sum_column=None,
 
     # Calculate the mean and standard deviation of the sum_column for each group
     df = df.groupby(group_by_column).agg(
-        F.count(F.col(group_by_column)).alias('no_events'),
+        F.count(F.col(group_by_column)).alias("no_events"),
         F.sum(sum_column).alias(sum_column)
     )
 
@@ -711,7 +712,7 @@ def statistical_anomaly_detection_group_by(df, group_by_column, sum_column=None,
         df = df.filter(F.col('no_events') >= no_minimum_window_events)
 
     if current_window_is_multiple_of_mean is not None and current_window_is_multiple_of_mean > 0:
-        df = df.filter(F.col(sum_column) >= F.col('Mean') * current_window_is_multiple_of_mean)
+        df = df.filter(F.col(sum_column) >= F.col("Mean") * current_window_is_multiple_of_mean)
     return df
 
 
@@ -742,22 +743,22 @@ def trending_based_rule(df, timestamp_column, partition_column, count_column=Non
 
     # First, group by the partition column and the timestamp column, and calculate the sum for each group
     grouped_df = df.groupBy(partition_column, timestamp_column).agg(
-        F.sum(count_column).alias('sum_count'))
+        F.sum(count_column).alias("sum_count"))
 
     # Then define a window ordered by the timestamp_column and partitioned by the partition_column
     window = Window.partitionBy(partition_column).orderBy(
         F.col(timestamp_column).cast("long"))
 
     # Calculate the average of the sum_count over the past hour for each row
-    grouped_df = grouped_df.withColumn('hour_avg', F.avg(
-        F.col('sum_count')).over(window.rangeBetween(hour_range, 0)))
+    grouped_df = grouped_df.withColumn("hour_avg", F.avg(
+        F.col("sum_count")).over(window.rangeBetween(hour_range, 0)))
     # Calculate the average of the sum_count over the past day for each row
-    grouped_df = grouped_df.withColumn('day_avg', F.avg(
-        F.col('sum_count')).over(window.rangeBetween(day_range, 0)))
+    grouped_df = grouped_df.withColumn("day_avg", F.avg(
+        F.col("sum_count")).over(window.rangeBetween(day_range, 0)))
 
     # Filter the DataFrame where the hour average is greater than the ratio_threshold times the day average
     df = grouped_df.filter(
-        F.col('hour_avg') > ratio_threshold * F.col('day_avg'))
+        F.col('hour_avg') > ratio_threshold * F.col("day_avg"))
 
     # Group by the partition_column and select the min and max timestamp, sum of count_column, and the hour_avg and day_avg
     df = df.groupBy(partition_column).agg(
@@ -771,7 +772,7 @@ def trending_based_rule(df, timestamp_column, partition_column, count_column=Non
     return df
 
 
-def statistically_significant_window_by_std(df, comparative_column: str, timestamp_column: str = '_event_time', z_score_threshold: float = 3.0, count_column=None, window='day', no_minimum_window_events=0, current_window_is_multiple_of_mean=2.0):
+def statistically_significant_window_by_std(df, comparative_column: str, timestamp_column: str = "_event_time", z_score_threshold: float = 3.0, count_column=None, window="day", no_minimum_window_events=0, current_window_is_multiple_of_mean=2.0):
     """
     This function identifies the records in the input dataframe `df` where the count of events in the last window of time
     (as specified by the `window` parameter) is statistically significantly higher than the mean count of events in previous windows.
@@ -793,7 +794,7 @@ def statistically_significant_window_by_std(df, comparative_column: str, timesta
 
     # Create a temporary column to hold the truncated timestamp
     truncated_date_column_name = "date_trucated_tmp"
-    default_count_column_name = 'count_column_tmp'
+    default_count_column_name = "count_column_tmp"
 
     # Create a dummy summation column if the 'count_column' is None
     if count_column is None:

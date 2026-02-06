@@ -240,7 +240,7 @@ else:
                 depends_on = [TaskDependency(task_key = "Investigate_Suspicious_Sharepoint_Activity"),
                               TaskDependency(task_key = "Suspicious_Number_Of_Emails_Sent_By_Employee")],
                 notebook_task = NotebookTask(
-                    notebook_path = "/Workspace/Users//Threat-Detection-With-LLM/2.2 [Investigation] Investigate Suspicious User with LLM", # paste your own notebook file path
+                    notebook_path = "/Workspace/Users/Threat-Detection-With-LLM/2.2 [Investigation] Investigate Suspicious User with LLM", # paste your own notebook file path
                     base_parameters = {"cluster-name": "Serverless"},
                 ),
                 email_notifications = TaskEmailNotifications(

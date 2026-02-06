@@ -47,20 +47,17 @@ for row in tables:
 # COMMAND ----------
 
 # DBTITLE 1,Key in user ID / get from widget
-# MAGIC %skip
-# MAGIC # Load the widgets
-# MAGIC dbutils.widgets.text("User", defaultValue="", label="User ID")
-# MAGIC dbutils.widgets.text("Email", defaultValue="", label="User Email")
-# MAGIC
-# MAGIC # note: widget can be used if running individual notebooks. However, if running from RUNME which establishes a job, the widget will not be available.
+# Load the widgets
+dbutils.widgets.text("User", defaultValue="", label="User ID")
+dbutils.widgets.text("Email", defaultValue="", label="User Email")
+
+# note: widget can be used if running individual notebooks. However, if running from RUNME which establishes a job, the widget will not be relevant.
 
 # COMMAND ----------
 
 # Get the user ID from either the task, or from the widget
-# user = None
-# email = None
-user = "John Doe"
-email = "johndoe@gmail.com"
+user = None
+email = None
 
 # If the widget doesn't have a user defined
 if user is None or user == "":
@@ -77,19 +74,22 @@ if user == None or user == "":
         print("Error: no task value to pull from job")
         user=None
 
+
 if email is None or email == "":
+    
     try:
-        email = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_Sharepoint_Activity", key = "email", debugValue = "DEBUG_UNDEFINED")
+        email = dbutils.jobs.taskValues.get(taskKey = "Investigate_Suspicious_Sharepoint_Activity", key = "sender", debugValue = "DEBUG_UNDEFINED")
     except ValueError:
         print("Error: no task value to pull from job")
-        user=None
+        email=None
 
 if email == None or email == "":
     try:
         email = dbutils.jobs.taskValues.get(taskKey = "Suspicious_Number_Of_Emails_Sent_By_Employee", key = "sender", debugValue = "DEBUG_UNDEFINED")
     except ValueError:
         print("Error: no task value to pull from job")
-        user=None
+        email=None
+
 
 # If the user is not defined, try the widget 
 if user is None or user=="DEBUG_UNDEFINED" or user == "":
@@ -98,7 +98,6 @@ if user is None or user=="DEBUG_UNDEFINED" or user == "":
 if user is None or user=="DEBUG_UNDEFINED" or user == "":
     print("ERROR: No username")
     raise Exception("Error: No username passed to notebook.")
-
 
 
 if email is None or email=="DEBUG_UNDEFINED" or email == "":
@@ -119,11 +118,13 @@ print(f"\n{'='*140}")
 ## CHANGE ME AS REQUIRED ##
 ###########################
 debug = False
-target_user = user # The target malicious user
-target_user_email = email # The target malicious user's email
-target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User'
-# target_catalog = first_name
-# target_schema = "threat_detection"
+target_user = "John Doe" # The target malicious user
+target_user_email = "johndoe@gmail.com" # The target malicious user's email
+target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User' [optional]
+
+print(f"\n{'='*140}\n")
+print(f"The data being created will include the user '{target_user}' with the email of '{target_user_email}'")
+print(f"\n{'='*140}")
 
 # COMMAND ----------
 

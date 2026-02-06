@@ -1,1 +1,1530 @@
-{"datasets":[{"name":"89267e15","displayName":"alert","query":"select * from kristin.threat_detection.alert;"},{"name":"396c1542","displayName":"antivirus","query":"SELECT * FROM kristin.threat_detection.antivirus"},{"name":"9f5f3ac8","displayName":"dlp","query":"SELECT * FROM kristin.threat_detection.dlp"},{"name":"11cd8711","displayName":"Alerts Past Hour","query":"SELECT * \nFROM kristin.threat_detection.alert \nWHERE date >= CURRENT_TIMESTAMP - INTERVAL 1 HOUR;"},{"name":"55a740bc","displayName":"web_logs","query":"SELECT * FROM kristin.threat_detection.web_logs"},{"name":"0476ec56","displayName":"url_filtering","query":"SELECT * FROM kristin.threat_detection.url_filtering"},{"name":"b45b8773","displayName":"Open Alerts","query":"Select * from kristin.threat_detection.alert where alert_status = \"Open\""},{"name":"f4f7d4cc","displayName":"Sharepoint Access","query":"Select * from kristin.threat_detection.sharepoint"},{"name":"2e179ec4","displayName":"Investigations","query":"select * from kristin.threat_detection.investigation"},{"name":"64f8a11d","displayName":"In Progress","query":"Select * from kristin.threat_detection.alert where alert_status = \"In Progress\""}],"pages":[{"name":"b2c4255a","displayName":"New Page","layout":[{"widget":{"name":"1443602d","queries":[{"name":"main_query","query":{"datasetName":"9f5f3ac8","fields":[{"name":"daily(timestamp)","expression":"DATE_TRUNC(\"DAY\", `timestamp`)"},{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":3,"widgetType":"line","encodings":{"x":{"fieldName":"daily(timestamp)","scale":{"type":"temporal"},"displayName":"timestamp"},"y":{"fieldName":"count(*)","scale":{"type":"quantitative"},"displayName":"Count of Records"},"label":{"show":true}},"frame":{"title":"DLP Events","showTitle":true,"showDescription":true,"description":"Last 30 Days"}}},"position":{"x":0,"y":18,"width":3,"height":4}},{"widget":{"name":"2d9cd411","textbox_spec":"\n# Threat Detection Alert Dashboard\n\nThis dashboard is an example of interactive interface designed to provide **real-time visualization** and management of security alerts within an organization. It features dynamic charts and graphs that display the volume and severity of threats over time, alongside detailed lists of active alerts categorized by type, source, and status. This dashboard enables security teams to quickly assess the overall threat landscape, prioritize alerts based on risk levels, and streamline response efforts by offering drill-down capabilities for in-depth analysis of specific incidents.\n"},"position":{"x":0,"y":0,"width":6,"height":3}},{"widget":{"name":"47b64829","queries":[{"name":"main_query","query":{"datasetName":"89267e15","fields":[{"name":"ID","expression":"`ID`"},{"name":"date","expression":"`date`"},{"name":"alert_name","expression":"`alert_name`"},{"name":"alert_desc","expression":"`alert_desc`"},{"name":"alert_status","expression":"`alert_status`"},{"name":"alert_source","expression":"`alert_source`"},{"name":"alert_category","expression":"`alert_category`"},{"name":"alert_subcategory","expression":"`alert_subcategory`"},{"name":"tags","expression":"`tags`"},{"name":"entity_id","expression":"`entity_id`"}],"disaggregated":true}}],"spec":{"version":1,"widgetType":"table","encodings":{"columns":[{"fieldName":"ID","numberFormat":"0","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"integer","displayAs":"number","visible":true,"order":100000,"title":"ID","allowSearch":false,"alignContent":"right","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"ID"},{"fieldName":"date","dateTimeFormat":"DD/MM/YYYY HH:mm:ss.SSS","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"datetime","displayAs":"datetime","visible":true,"order":100001,"title":"date","allowSearch":false,"alignContent":"right","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"date"},{"fieldName":"alert_name","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100002,"title":"alert_name","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_name"},{"fieldName":"alert_desc","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100003,"title":"alert_desc","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_desc"},{"fieldName":"alert_status","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100004,"title":"alert_status","allowSearch":true,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":null},"rules":[{"if":{"column":"alert_status","fn":"=","literal":"Open"},"value":{"foregroundColor":"#f11717"}}]},"displayName":"alert_status"},{"fieldName":"alert_source","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100005,"title":"alert_source","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_source"},{"fieldName":"alert_category","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100006,"title":"alert_category","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_category"},{"fieldName":"alert_subcategory","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100007,"title":"alert_subcategory","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_subcategory"},{"fieldName":"tags","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100008,"title":"tags","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"tags"},{"fieldName":"entity_id","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":100009,"title":"entity_id","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"entity_id"}]},"invisibleColumns":[{"booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"name":"entity_type","type":"string","displayAs":"string","order":100010,"title":"entity_type","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false},{"booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"name":"alert_details","type":"complex","displayAs":"json","order":100011,"title":"alert_details","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false}],"allowHTMLByDefault":false,"itemsPerPage":25,"paginationSize":"default","condensed":true,"withRowNumber":false,"frame":{"showTitle":true,"title":"Detailed Alert Table"}}},"position":{"x":0,"y":26,"width":6,"height":10}},{"widget":{"name":"9a0e84ea","queries":[{"name":"main_query","query":{"datasetName":"396c1542","fields":[{"name":"daily(time)","expression":"DATE_TRUNC(\"DAY\", `time`)"},{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":3,"widgetType":"line","encodings":{"x":{"fieldName":"daily(time)","scale":{"type":"temporal"},"displayName":"time"},"y":{"fieldName":"count(*)","scale":{"type":"quantitative"},"axis":{"title":"Count"},"displayName":"Count"}},"frame":{"showTitle":true,"showDescription":true,"title":"Antivirus Events","description":"Last 30 Days"}}},"position":{"x":0,"y":22,"width":3,"height":4}},{"widget":{"name":"9e77fc6b","queries":[{"name":"main_query","query":{"datasetName":"11cd8711","fields":[{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":2,"widgetType":"counter","encodings":{"value":{"fieldName":"count(*)","style":{"rules":[{"condition":{"operator":">=","operand":{"type":"data-value","value":"0"}},"color":"#e5280d"}]},"displayName":"Count of Records"}},"frame":{"showTitle":true,"title":"New Alerts","showDescription":true,"description":"Last Hour"}}},"position":{"x":3,"y":3,"width":1,"height":4}},{"widget":{"name":"909424a1","queries":[{"name":"main_query","query":{"datasetName":"0476ec56","fields":[{"name":"url_category","expression":"`url_category`"},{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":3,"widgetType":"bar","encodings":{"x":{"fieldName":"url_category","scale":{"type":"categorical"},"displayName":"url_category"},"y":{"fieldName":"count(*)","scale":{"type":"quantitative"},"displayName":"Count of Records"}},"frame":{"showDescription":true,"showTitle":true,"title":"URL Filtering","description":"Last 30 Days"},"mark":{"colors":["#AB4057","#FFAB00","#00A972","#FF3621","#8BCAE7","#AB4057","#99DDB4","#FCA4A1","#919191","#BF7080"]}}},"position":{"x":3,"y":22,"width":3,"height":4}},{"widget":{"name":"8ce423c3","queries":[{"name":"main_query","query":{"datasetName":"11cd8711","fields":[{"name":"date","expression":"`date`"},{"name":"alert_name","expression":"`alert_name`"},{"name":"entity_id","expression":"`entity_id`"},{"name":"alert_status","expression":"`alert_status`"},{"name":"alert_source","expression":"`alert_source`"},{"name":"alert_category","expression":"`alert_category`"},{"name":"alert_subcategory","expression":"`alert_subcategory`"},{"name":"alert_details","expression":"`alert_details`"},{"name":"tags","expression":"`tags`"},{"name":"entity_type","expression":"`entity_type`"},{"name":"alert_desc","expression":"`alert_desc`"},{"name":"ID","expression":"`ID`"}],"disaggregated":true}}],"spec":{"version":1,"widgetType":"table","encodings":{"columns":[{"fieldName":"date","dateTimeFormat":"DD/MM/YY HH:mm:ss.SSS","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"datetime","displayAs":"datetime","visible":true,"order":0,"title":"date","allowSearch":false,"alignContent":"right","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"date"},{"fieldName":"alert_name","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":1,"title":"alert_name","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"alert_name"},{"fieldName":"entity_id","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":2,"title":"entity_id","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"entity_id"},{"fieldName":"alert_status","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":3,"title":"alert_status","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"alert_status"},{"fieldName":"alert_source","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":4,"title":"alert_source","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"alert_source"},{"fieldName":"alert_category","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":5,"title":"alert_category","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"alert_category"},{"fieldName":"alert_subcategory","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":6,"title":"alert_subcategory","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"cellFormat":{"default":{"foregroundColor":"#e51111"},"rules":[]},"displayName":"alert_subcategory"},{"fieldName":"alert_details","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"complex","displayAs":"json","visible":true,"order":7,"title":"alert_details","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_details"},{"fieldName":"tags","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":8,"title":"tags","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"tags"},{"fieldName":"entity_type","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":9,"title":"entity_type","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"entity_type"},{"fieldName":"alert_desc","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"string","displayAs":"string","visible":true,"order":10,"title":"alert_desc","allowSearch":false,"alignContent":"left","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"alert_desc"},{"fieldName":"ID","numberFormat":"0","booleanValues":["false","true"],"imageUrlTemplate":"{{ @ }}","imageTitleTemplate":"{{ @ }}","imageWidth":"","imageHeight":"","linkUrlTemplate":"{{ @ }}","linkTextTemplate":"{{ @ }}","linkTitleTemplate":"{{ @ }}","linkOpenInNewTab":true,"type":"integer","displayAs":"number","visible":true,"order":11,"title":"ID","allowSearch":false,"alignContent":"right","allowHTML":false,"highlightLinks":false,"useMonospaceFont":false,"preserveWhitespace":false,"displayName":"ID"}]},"invisibleColumns":[],"allowHTMLByDefault":false,"itemsPerPage":25,"paginationSize":"default","condensed":true,"withRowNumber":false,"frame":{"showTitle":true,"showDescription":true,"title":"New Alerts","description":"Last Hour"}}},"position":{"x":0,"y":7,"width":6,"height":5}},{"widget":{"name":"f753ed55","queries":[{"name":"main_query","query":{"datasetName":"b45b8773","fields":[{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":2,"widgetType":"counter","encodings":{"value":{"fieldName":"count(*)","style":{"rules":[{"condition":{"operator":">","operand":{"type":"data-value","value":"0"}},"color":"#e5280d"}]},"displayName":"Count of Records"}},"frame":{"showTitle":true,"showDescription":true,"title":"Open Alerts","description":"Awaiting Investigation"}}},"position":{"x":4,"y":3,"width":1,"height":4}},{"widget":{"name":"95245e7d","queries":[{"name":"main_query","query":{"datasetName":"f4f7d4cc","fields":[{"name":"document_name","expression":"`document_name`"},{"name":"sum(no_prints)","expression":"SUM(`no_prints`)"}],"disaggregated":false}}],"spec":{"version":3,"widgetType":"bar","encodings":{"x":{"fieldName":"document_name","scale":{"type":"categorical"},"axis":{"title":"Document Name","hideLabels":true},"displayName":"Document Name"},"y":{"fieldName":"sum(no_prints)","scale":{"type":"quantitative"},"axis":{"title":"# Prints"},"displayName":"# Prints"}},"frame":{"showTitle":true,"showDescription":true,"title":"Document Access Patterns","description":"Last 30 Days"}}},"position":{"x":0,"y":36,"width":6,"height":6}},{"widget":{"name":"8c0e6ed0","queries":[{"name":"main_query","query":{"datasetName":"2e179ec4","fields":[{"name":"daily(date)","expression":"DATE_TRUNC(\"DAY\", `date`)"},{"name":"investigation_name","expression":"`investigation_name`"},{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":3,"widgetType":"bar","encodings":{"x":{"fieldName":"investigation_name","scale":{"type":"categorical"},"axis":{"hideLabels":false,"hideTitle":true},"displayName":"investigation_name"},"y":{"fieldName":"count(*)","scale":{"type":"quantitative"},"axis":{"title":"Count"},"displayName":"Count"},"color":{"fieldName":"daily(date)","scale":{"type":"temporal"},"displayName":"date"}},"frame":{"showTitle":true,"title":"Opened Investigations","showDescription":true,"description":"Last 30 Days"}}},"position":{"x":3,"y":18,"width":3,"height":4}},{"widget":{"name":"b24c063f","textbox_spec":"# Detection & Response\n\n- [Detection] [#2023.204: Suspicious User Document Access Activity](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n- [Detection] [#2023.205: Suspicious Number of Emails Sent by Sender](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391635653/command/2032780391635654)\n- [Investigation] [#2023.113: Investigate Suspicious User](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n- [Investigation] [#2023.113: Investigate Malware Detection](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n- [Response] [#2023.114: Active Directory User Disabling Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)\n- [Response] [#2023.5: AWS User Disabling Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)\n- [Response] [#2023.6: IP Blocking Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)"},"position":{"x":0,"y":3,"width":3,"height":4}},{"widget":{"name":"911729fb","queries":[{"name":"main_query","query":{"datasetName":"64f8a11d","fields":[{"name":"count(*)","expression":"COUNT(`*`)"}],"disaggregated":false}}],"spec":{"version":2,"widgetType":"counter","encodings":{"value":{"fieldName":"count(*)","style":{"rules":[{"condition":{"operator":">","operand":{"type":"data-value","value":"0"}},"color":"#356AFF"}]},"displayName":"Count of Records"}},"frame":{"showTitle":true,"showDescription":true,"title":"In Progress","description":"Under Investigation"}}},"position":{"x":5,"y":3,"width":1,"height":4}},{"widget":{"name":"23dd65ff","queries":[{"name":"main_query","query":{"datasetName":"89267e15","disaggregated":true}}],"spec":{"version":3,"widgetType":"bar","encodings":{}}},"position":{"x":2,"y":12,"width":3,"height":6}}]}]}
+{
+  "datasets": [
+    {
+      "name": "89267e15",
+      "displayName": "alert",
+      "queryLines": [
+        "select * from kristin.threat_detection.alert;"
+      ]
+    },
+    {
+      "name": "396c1542",
+      "displayName": "antivirus",
+      "queryLines": [
+        "SELECT * FROM kristin.threat_detection.antivirus"
+      ]
+    },
+    {
+      "name": "9f5f3ac8",
+      "displayName": "dlp",
+      "queryLines": [
+        "SELECT * FROM kristin.threat_detection.dlp"
+      ]
+    },
+    {
+      "name": "11cd8711",
+      "displayName": "Alerts Past Hour",
+      "queryLines": [
+        "SELECT * \n",
+        "FROM kristin.threat_detection.alert \n",
+        "WHERE date >= CURRENT_TIMESTAMP - INTERVAL 1 HOUR;"
+      ]
+    },
+    {
+      "name": "55a740bc",
+      "displayName": "web_logs",
+      "queryLines": [
+        "SELECT * FROM kristin.threat_detection.web_logs"
+      ]
+    },
+    {
+      "name": "0476ec56",
+      "displayName": "url_filtering",
+      "queryLines": [
+        "SELECT * FROM kristin.threat_detection.url_filtering"
+      ]
+    },
+    {
+      "name": "b45b8773",
+      "displayName": "Open Alerts",
+      "queryLines": [
+        "Select * from kristin.threat_detection.alert where alert_status = \"Open\""
+      ]
+    },
+    {
+      "name": "f4f7d4cc",
+      "displayName": "Sharepoint Access",
+      "queryLines": [
+        "Select * from kristin.threat_detection.sharepoint"
+      ]
+    },
+    {
+      "name": "2e179ec4",
+      "displayName": "Investigations",
+      "queryLines": [
+        "select * from kristin.threat_detection.investigation"
+      ]
+    },
+    {
+      "name": "64f8a11d",
+      "displayName": "In Progress",
+      "queryLines": [
+        "Select * from kristin.threat_detection.alert where alert_status = \"In Progress\""
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "b2c4255a",
+      "displayName": "New Page",
+      "layout": [
+        {
+          "widget": {
+            "name": "1443602d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9f5f3ac8",
+                  "fields": [
+                    {
+                      "name": "daily(timestamp)",
+                      "expression": "DATE_TRUNC(\"DAY\", `timestamp`)"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(timestamp)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "timestamp"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of Records"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "DLP Events",
+                "showTitle": true,
+                "showDescription": true,
+                "description": "Last 30 Days"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 18,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "2d9cd411",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "# Threat Detection Alert Dashboard\n",
+                "\n",
+                "This dashboard is an example of interactive interface designed to provide **real-time visualization** and management of security alerts within an organization. It features dynamic charts and graphs that display the volume and severity of threats over time, alongside detailed lists of active alerts categorized by type, source, and status. This dashboard enables security teams to quickly assess the overall threat landscape, prioritize alerts based on risk levels, and streamline response efforts by offering drill-down capabilities for in-depth analysis of specific incidents.\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "47b64829",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "89267e15",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "expression": "`ID`"
+                    },
+                    {
+                      "name": "date",
+                      "expression": "`date`"
+                    },
+                    {
+                      "name": "alert_name",
+                      "expression": "`alert_name`"
+                    },
+                    {
+                      "name": "alert_desc",
+                      "expression": "`alert_desc`"
+                    },
+                    {
+                      "name": "alert_status",
+                      "expression": "`alert_status`"
+                    },
+                    {
+                      "name": "alert_source",
+                      "expression": "`alert_source`"
+                    },
+                    {
+                      "name": "alert_category",
+                      "expression": "`alert_category`"
+                    },
+                    {
+                      "name": "alert_subcategory",
+                      "expression": "`alert_subcategory`"
+                    },
+                    {
+                      "name": "tags",
+                      "expression": "`tags`"
+                    },
+                    {
+                      "name": "entity_id",
+                      "expression": "`entity_id`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "ID",
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "ID",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ID"
+                  },
+                  {
+                    "fieldName": "date",
+                    "dateTimeFormat": "DD/MM/YYYY HH:mm:ss.SSS",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "datetime",
+                    "displayAs": "datetime",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "date",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "date"
+                  },
+                  {
+                    "fieldName": "alert_name",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "alert_name",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_name"
+                  },
+                  {
+                    "fieldName": "alert_desc",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100003,
+                    "title": "alert_desc",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_desc"
+                  },
+                  {
+                    "fieldName": "alert_status",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100004,
+                    "title": "alert_status",
+                    "allowSearch": true,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": null
+                      },
+                      "rules": [
+                        {
+                          "if": {
+                            "column": "alert_status",
+                            "fn": "=",
+                            "literal": "Open"
+                          },
+                          "value": {
+                            "foregroundColor": "#f11717"
+                          }
+                        }
+                      ]
+                    },
+                    "displayName": "alert_status"
+                  },
+                  {
+                    "fieldName": "alert_source",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100005,
+                    "title": "alert_source",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_source"
+                  },
+                  {
+                    "fieldName": "alert_category",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100006,
+                    "title": "alert_category",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_category"
+                  },
+                  {
+                    "fieldName": "alert_subcategory",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100007,
+                    "title": "alert_subcategory",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_subcategory"
+                  },
+                  {
+                    "fieldName": "tags",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100008,
+                    "title": "tags",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "tags"
+                  },
+                  {
+                    "fieldName": "entity_id",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100009,
+                    "title": "entity_id",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "entity_id"
+                  }
+                ]
+              },
+              "invisibleColumns": [
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "entity_type",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 100010,
+                  "title": "entity_type",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "alert_details",
+                  "type": "complex",
+                  "displayAs": "json",
+                  "order": 100011,
+                  "title": "alert_details",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                }
+              ],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "showTitle": true,
+                "title": "Detailed Alert Table"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 26,
+            "width": 6,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "9a0e84ea",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "396c1542",
+                  "fields": [
+                    {
+                      "name": "daily(time)",
+                      "expression": "DATE_TRUNC(\"DAY\", `time`)"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(time)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "time"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Count"
+                  },
+                  "displayName": "Count"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "Antivirus Events",
+                "description": "Last 30 Days"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 22,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "9e77fc6b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "11cd8711",
+                  "fields": [
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(*)",
+                  "style": {
+                    "rules": [
+                      {
+                        "condition": {
+                          "operator": ">=",
+                          "operand": {
+                            "type": "data-value",
+                            "value": "0"
+                          }
+                        },
+                        "color": "#e5280d"
+                      }
+                    ]
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "New Alerts",
+                "showDescription": true,
+                "description": "Last Hour"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 3,
+            "width": 1,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "909424a1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0476ec56",
+                  "fields": [
+                    {
+                      "name": "url_category",
+                      "expression": "`url_category`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "url_category",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "url_category"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showDescription": true,
+                "showTitle": true,
+                "title": "URL Filtering",
+                "description": "Last 30 Days"
+              },
+              "mark": {
+                "colors": [
+                  "#AB4057",
+                  "#FFAB00",
+                  "#00A972",
+                  "#FF3621",
+                  "#8BCAE7",
+                  "#AB4057",
+                  "#99DDB4",
+                  "#FCA4A1",
+                  "#919191",
+                  "#BF7080"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 22,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "8ce423c3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "11cd8711",
+                  "fields": [
+                    {
+                      "name": "date",
+                      "expression": "`date`"
+                    },
+                    {
+                      "name": "alert_name",
+                      "expression": "`alert_name`"
+                    },
+                    {
+                      "name": "entity_id",
+                      "expression": "`entity_id`"
+                    },
+                    {
+                      "name": "alert_status",
+                      "expression": "`alert_status`"
+                    },
+                    {
+                      "name": "alert_source",
+                      "expression": "`alert_source`"
+                    },
+                    {
+                      "name": "alert_category",
+                      "expression": "`alert_category`"
+                    },
+                    {
+                      "name": "alert_subcategory",
+                      "expression": "`alert_subcategory`"
+                    },
+                    {
+                      "name": "alert_details",
+                      "expression": "`alert_details`"
+                    },
+                    {
+                      "name": "tags",
+                      "expression": "`tags`"
+                    },
+                    {
+                      "name": "entity_type",
+                      "expression": "`entity_type`"
+                    },
+                    {
+                      "name": "alert_desc",
+                      "expression": "`alert_desc`"
+                    },
+                    {
+                      "name": "ID",
+                      "expression": "`ID`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "date",
+                    "dateTimeFormat": "DD/MM/YY HH:mm:ss.SSS",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "datetime",
+                    "displayAs": "datetime",
+                    "visible": true,
+                    "order": 0,
+                    "title": "date",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "date"
+                  },
+                  {
+                    "fieldName": "alert_name",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 1,
+                    "title": "alert_name",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "alert_name"
+                  },
+                  {
+                    "fieldName": "entity_id",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 2,
+                    "title": "entity_id",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "entity_id"
+                  },
+                  {
+                    "fieldName": "alert_status",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 3,
+                    "title": "alert_status",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "alert_status"
+                  },
+                  {
+                    "fieldName": "alert_source",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 4,
+                    "title": "alert_source",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "alert_source"
+                  },
+                  {
+                    "fieldName": "alert_category",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 5,
+                    "title": "alert_category",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "alert_category"
+                  },
+                  {
+                    "fieldName": "alert_subcategory",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 6,
+                    "title": "alert_subcategory",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": "#e51111"
+                      },
+                      "rules": []
+                    },
+                    "displayName": "alert_subcategory"
+                  },
+                  {
+                    "fieldName": "alert_details",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "complex",
+                    "displayAs": "json",
+                    "visible": true,
+                    "order": 7,
+                    "title": "alert_details",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_details"
+                  },
+                  {
+                    "fieldName": "tags",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 8,
+                    "title": "tags",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "tags"
+                  },
+                  {
+                    "fieldName": "entity_type",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 9,
+                    "title": "entity_type",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "entity_type"
+                  },
+                  {
+                    "fieldName": "alert_desc",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 10,
+                    "title": "alert_desc",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "alert_desc"
+                  },
+                  {
+                    "fieldName": "ID",
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 11,
+                    "title": "ID",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "ID"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "New Alerts",
+                "description": "Last Hour"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "f753ed55",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b45b8773",
+                  "fields": [
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(*)",
+                  "style": {
+                    "rules": [
+                      {
+                        "condition": {
+                          "operator": ">",
+                          "operand": {
+                            "type": "data-value",
+                            "value": "0"
+                          }
+                        },
+                        "color": "#e5280d"
+                      }
+                    ]
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "Open Alerts",
+                "description": "Awaiting Investigation"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 3,
+            "width": 1,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "95245e7d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f4f7d4cc",
+                  "fields": [
+                    {
+                      "name": "document_name",
+                      "expression": "`document_name`"
+                    },
+                    {
+                      "name": "sum(no_prints)",
+                      "expression": "SUM(`no_prints`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "document_name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "title": "Document Name",
+                    "hideLabels": true
+                  },
+                  "displayName": "Document Name"
+                },
+                "y": {
+                  "fieldName": "sum(no_prints)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "# Prints"
+                  },
+                  "displayName": "# Prints"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "Document Access Patterns",
+                "description": "Last 30 Days"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 36,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "8c0e6ed0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2e179ec4",
+                  "fields": [
+                    {
+                      "name": "daily(date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `date`)"
+                    },
+                    {
+                      "name": "investigation_name",
+                      "expression": "`investigation_name`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "investigation_name",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "hideLabels": false,
+                    "hideTitle": true
+                  },
+                  "displayName": "investigation_name"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Count"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "daily(date)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "date"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Opened Investigations",
+                "showDescription": true,
+                "description": "Last 30 Days"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 18,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "b24c063f",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Detection & Response\n",
+                "\n",
+                "- [Detection] [#2023.204: Suspicious User Document Access Activity](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n",
+                "- [Detection] [#2023.205: Suspicious Number of Emails Sent by Sender](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391635653/command/2032780391635654)\n",
+                "- [Investigation] [#2023.113: Investigate Suspicious User](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n",
+                "- [Investigation] [#2023.113: Investigate Malware Detection](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633174/command/2032780391633175)\n",
+                "- [Response] [#2023.114: Active Directory User Disabling Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)\n",
+                "- [Response] [#2023.5: AWS User Disabling Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)\n",
+                "- [Response] [#2023.6: IP Blocking Playbook](https://e2-demo-field-eng.cloud.databricks.com/?o=1444828305810485#notebook/2032780391633021/command/2032780391633022)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "911729fb",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "64f8a11d",
+                  "fields": [
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(*)",
+                  "style": {
+                    "rules": [
+                      {
+                        "condition": {
+                          "operator": ">",
+                          "operand": {
+                            "type": "data-value",
+                            "value": "0"
+                          }
+                        },
+                        "color": "#356AFF"
+                      }
+                    ]
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": true,
+                "title": "In Progress",
+                "description": "Under Investigation"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 3,
+            "width": 1,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "23dd65ff",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "89267e15",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {}
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 12,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
