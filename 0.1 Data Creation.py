@@ -46,8 +46,23 @@ for row in tables:
 
 # COMMAND ----------
 
-# DBTITLE 1,Key in user ID / get from widget
-# Load the widgets
+# Notebook level variables
+###########################
+## CHANGE ME AS REQUIRED ##
+###########################
+debug = False
+target_user = "John Doe" # The target malicious user
+target_user_email = "johndoe@gmail.com" # The target malicious user's email
+target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User' [optional]
+
+print(f"\n{'='*140}\n")
+print(f"The data being created will include the user '{target_user}' with the email of '{target_user_email}'")
+print(f"\n{'='*140}")
+
+# COMMAND ----------
+
+# DBTITLE 1,Key in user ID / get from widget (only for individual notebook use, skip cell if executing from job)
+# Load the widgets 
 dbutils.widgets.text("User", defaultValue="", label="User ID")
 dbutils.widgets.text("Email", defaultValue="", label="User Email")
 
@@ -55,6 +70,7 @@ dbutils.widgets.text("Email", defaultValue="", label="User Email")
 
 # COMMAND ----------
 
+# DBTITLE 1,Variable initialisation (only for individual notebook use, skip cell if executing from job)
 # Get the user ID from either the task, or from the widget
 user = None
 email = None
@@ -94,6 +110,7 @@ if email == None or email == "":
 # If the user is not defined, try the widget 
 if user is None or user=="DEBUG_UNDEFINED" or user == "":
     user = dbutils.widgets.get("User")
+    target_user = user
 
 if user is None or user=="DEBUG_UNDEFINED" or user == "":
     print("ERROR: No username")
@@ -102,6 +119,7 @@ if user is None or user=="DEBUG_UNDEFINED" or user == "":
 
 if email is None or email=="DEBUG_UNDEFINED" or email == "":
     email = dbutils.widgets.get("Email")
+    target_user_email = email
 
 if email is None or email=="DEBUG_UNDEFINED" or email == "":
     print("ERROR: No email")
@@ -109,21 +127,6 @@ if email is None or email=="DEBUG_UNDEFINED" or email == "":
 
 print(f"\n{'='*140}\n")
 print(f"The data being created will include the user '{user}' with the email of '{email}'")
-print(f"\n{'='*140}")
-
-# COMMAND ----------
-
-# Notebook level variables
-###########################
-## CHANGE ME AS REQUIRED ##
-###########################
-debug = False
-target_user = "John Doe" # The target malicious user
-target_user_email = "johndoe@gmail.com" # The target malicious user's email
-target_user_azure_guid = '78687760-202a-4666-a79e-7cef89b8a44d' # Set this to the Azure Entra GUID of the user to be disabled in '3.1 [Response] Disable Suspicious User' [optional]
-
-print(f"\n{'='*140}\n")
-print(f"The data being created will include the user '{target_user}' with the email of '{target_user_email}'")
 print(f"\n{'='*140}")
 
 # COMMAND ----------
