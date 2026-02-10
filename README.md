@@ -1,5 +1,5 @@
 # Threat-Detection-and-Reporting-with-LLM
-This is a Databricks Cybersecurity demo for building linked detection, investigation and response jobs in Databricks Workflows. It is originally based on the work of [David Wells](https://github.com/DavidWells-DB/Suspicious-User-Activity-Demo), and later [Kristin Dahl](https://github.com/kristin-db/Threat-Detection-Demo). Kristin's version updated the demo with additional alerting, a Threat Detection dashboard, and integration with Databricks' Unity Catalog. This version is updated with the implementation of Large Language Models (LLM)s that are available for use in Databricks and email reporting, while enhancing job creation and auto-run. Emphasis on this version is that it operates entirely under the Databricks Free Edition.
+This is a Databricks Cybersecurity demo for building linked detection, investigation and response jobs in Databricks Workflows. It is originally based on the work of [David Wells](https://github.com/DavidWells-DB/Suspicious-User-Activity-Demo), and later [Kristin Dahl](https://github.com/kristin-db/Threat-Detection-Demo). Kristin's version updated the demo with additional alerting, a Threat Detection dashboard, and integration with Databricks' Unity Catalog. This version is updated with the implementation of Large Language Models (LLM)s that are available for use in Databricks and email reporting, while enhancing job creation and auto-run. Emphasis in this version is that it operates entirely under the Databricks Free Edition, making it accessible to a wider learning audience.
 
 ## Main changes of this version:
 1. Simplified Delta Lake storage path while maintaining some original work.
@@ -11,15 +11,16 @@ This is a Databricks Cybersecurity demo for building linked detection, investiga
 7. Automatically sends out a Threat Detection report alongside Evaluation results via Gmail SMTP.
 8. Attached print screen of LLM evaluation experiment traces found in Databricks Experiments, obtained from using MLflow traces.
 9. Attached print screen of receiver's eamil obtaining the report to demonstrate how Databricks can auto generate professional-grade email.
+10. Enhanced job creation script on Serverless compute and auto-run.
 
 ## Suggestions for future release/version:
 1. Incorporate Retrieval Augmented Generation (RAG) component such as using LangChain library to read unstructured data from PDF file and structure data from Delta Lake tables.
 2. Build data ingestion pipelines to:
    1. parse files
    2. chunk data with ideal chunking strategy
-   3. embed with ideal embedded models
+   3. embedding with ideal embedding models
    4. store the chunked and embedded vector data in Unity Catalog tables for retrieval and augmentation later on.
-3. Develop frontend such as using StreamLit for user to query the Delta Lake tables using natural language.
+3. Develop frontend such as using Streamlit for user to query the Delta Lake tables using natural language.
 4. Support multiple languages besides default English.
 5. Develop traditional machine learning model to fully utilise the cybersecurity log data for recommendation and also serve as check and balance against LLM results.
 
